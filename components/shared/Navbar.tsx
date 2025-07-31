@@ -5,6 +5,8 @@ import { Package2 } from "lucide-react"; // 📦 Logo icon from Lucide
 import { CartSheet } from "./CartSheet"; // 🛒 Slide-out cart drawer component
 import { SearchBar } from "./SearchBar"; // 🔍 Import the search bar component
 
+import { UserNav } from "./UserNav"; // Import UserNav
+
 // 🧭 Navbar component definition
 export function Navbar() {
   return (
@@ -30,8 +32,9 @@ export function Navbar() {
         </div>
 
         {/* 🛒 Cart icon always visible */}
-        <nav>
+        <nav className="flex items-center gap-4">
           <CartSheet />
+          <UserNav />
         </nav>
       </div>
     </header>

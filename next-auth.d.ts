@@ -1,24 +1,24 @@
-// next-auth.d.ts
-
 import type { UserRole } from "@prisma/client";
 import { type DefaultSession } from "next-auth";
 
-// Extend the built-in session and user types
 declare module "next-auth" {
   /**
-   * The shape of the user object returned in the JWT and session callbacks.
+   * We are extending the built-in User model with our custom fields
    */
   interface User {
     role: UserRole;
   }
 
   /**
-   * The shape of the session object.
+   * We are extending the built-in Session model
    */
   interface Session {
     user: {
+      /** Your custom properties */
       id: string;
-      role?: UserRole; // Add the role property to the session user
-    } & DefaultSession;
+      role: UserRole;
+      
+      /** Default properties */
+    } & DefaultSession["user"]; // <-- This "&" is the key to merging the types
   }
 }

@@ -1,6 +1,10 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+// ✅ Fix: Removed useFormState from react-dom
+import { useFormStatus } from "react-dom";
+// ✅ Fix: Imported useActionState from react
+import { useEffect, useRef, useActionState } from "react";
+
 import { createProduct } from "@/actions/product";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { useEffect, useRef } from "react";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -30,12 +33,11 @@ export default function NewProductForm({
 }: {
   categories: { id: string; name: string }[];
 }) {
-  // ✅ Fix: message should be undefined, not null
   const initialState = { message: undefined, errors: {} };
 
-  // ✅ Fix: wrap createProduct for correct useFormState signature
-  const [state, dispatch] = useFormState(
-    async (state: any, formData: FormData) => await createProduct(state, formData),
+  // ✅ Fix: Renamed useFormState to useActionState
+  const [state, dispatch] = useActionState(
+    async (prevState: any, formData: FormData) => await createProduct(prevState, formData),
     initialState
   );
 
@@ -59,7 +61,7 @@ export default function NewProductForm({
         ref={formRef}
         action={dispatch}
         className="max-w-2xl space-y-6"
-        encType="multipart/form-data"
+        // ✅ Fix: Removed the unnecessary encType prop
       >
         <div>
           <Label htmlFor="name">Product Name</Label>

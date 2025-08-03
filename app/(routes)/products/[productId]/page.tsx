@@ -6,6 +6,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import type { Product, Category } from "@prisma/client";
+import { ReviewForm } from "@/components/products/ReviewForm";
+import { ReviewList } from "@/components/products/ReviewList";
+import { Separator } from "@/components/ui/separator";
 
 // 📦 Type combining product and category
 type ProductWithCategory = Product & { category: Category };
@@ -70,7 +73,8 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="flex flex-col justify-center">
           <h1 className="text-3xl lg:text-4xl font-bold mb-2">{product.name}</h1>
           <p className="text-2xl lg:text-3xl font-semibold text-primary mb-4">
-            ${product.price.toFixed(2)}
+            {/* Note: price is in cents, converting back for display */}
+            ${(product.price / 100).toFixed(2)}
           </p>
           <p className="text-muted-foreground mb-6 leading-relaxed">{product.description}</p>
           <div className="flex items-center gap-4 mb-6">
@@ -84,6 +88,20 @@ export default function ProductPage({ params }: ProductPageProps) {
               Add to Cart
             </Button>
           </div>
+        </div>
+      </div>
+
+      {/* ✅ Review Section Added Below */}
+      <Separator className="my-12" />
+
+      <div className="grid md:grid-cols-2 gap-12">
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Leave a Review</h2>
+          <ReviewForm productId={product.id} />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+          <ReviewList productId={product.id} />
         </div>
       </div>
     </div>

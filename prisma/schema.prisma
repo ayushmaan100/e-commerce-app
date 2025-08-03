@@ -88,6 +88,8 @@ model Product {
   categoryId  String   @db.ObjectId
   category    Category @relation(fields: [categoryId], references: [id])
 
+  orderItems OrderItem[]
+
   reviews     Review[]
 
   createdAt   DateTime @default(now())
@@ -108,13 +110,36 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 model Order {
   id        String      @id @default(auto()) @map("_id") @db.ObjectId
   userId    String      @db.ObjectId
   user      User        @relation(fields: [userId], references: [id])
-  // ... other order fields will be added in the next phase
+
+
+  amount    Float
+  currency  String
+  status    String      @default("pending")
+  items     OrderItem[] // Relation to the new OrderItem model
+
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
 
+model OrderItem {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  orderId  String @db.ObjectId
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // ✅ Added relation to Product
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+
+  name     String
+  // ✅ Changed from Float to Int
+  price    Int
+  quantity Int
+
+  @@index([orderId])
+  // ✅ Added index for faster product lookups in orders
+  @@index([productId])
+}

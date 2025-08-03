@@ -1,12 +1,14 @@
 "use client";
 
-import { useFormState, useFormStatus } from "react-dom";
+// ✅ Fix 1: Removed useFormState from this import
+import { useFormStatus } from "react-dom";
 import { createCategory } from "@/actions/category";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { useEffect, useRef } from "react";
+// ✅ Fix 2: Imported useActionState here with other React hooks
+import { useEffect, useRef, useActionState } from "react";
 
 // Submit button component using useFormStatus to show loading
 function SubmitButton() {
@@ -19,12 +21,11 @@ function SubmitButton() {
 }
 
 export default function CategoriesPage() {
-  // ✅ Fix: Use undefined instead of null for initial state
   const initialState = { message: undefined, errors: {} };
 
-  // ✅ Wrap createCategory to match expected useFormState signature
-  const [state, dispatch] = useFormState(
-    async (state: any, formData: FormData) => await createCategory(state, formData),
+  // ✅ Fix 3: Renamed useFormState to useActionState
+  const [state, dispatch] = useActionState(
+    async (prevState: any, formData: FormData) => await createCategory(prevState, formData),
     initialState
   );
 
@@ -35,7 +36,7 @@ export default function CategoriesPage() {
     if (state.message) {
       if (state.message.startsWith("Success:")) {
         toast.success(state.message.replace("Success: ", ""));
-        formRef.current?.reset(); // ✅ Clear form
+        formRef.current?.reset();
       } else {
         toast.error(state.message.replace("Error: ", ""));
       }

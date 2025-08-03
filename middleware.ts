@@ -41,6 +41,7 @@ export default auth((req) => {
 });
 
 // This config ensures middleware only runs on these paths
+// middleware.ts
 export const config = {
-  matcher: ["/dashboard/:path*", "/profile/:path*"],
+  matcher: ["/dashboard/:path*", "/profile/:path*", "/checkout"],
 };

@@ -60,6 +60,12 @@ export async function UserNav() {
         <DropdownMenuItem asChild>
           <Link href="/profile">Profile</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/profile/orders">Orders</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/profile/wishlist">Wishlist</Link>
+        </DropdownMenuItem>
 
         {/* If user has ADMIN role, show dashboard link */}
         {session.user.role === "ADMIN" && (
